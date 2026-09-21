@@ -1,4 +1,8 @@
-# Aeolian lizard hybridization — analysis code
+# Aeolian lizard hybridization
+
+
+<img width="642" height="304" alt="Screenshot 2026-09-21 at 17 54 33" src="https://github.com/user-attachments/assets/8be42fa5-3318-4118-8872-1c3c87c95c10" />
+
 
 Code and configuration files for:
 
