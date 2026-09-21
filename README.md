@@ -5,7 +5,7 @@ Code and configuration files for:
 > Paris JR, Ficetola GF, Ferrer Obiol J, Silva-Rocha I, Carretero MA, Salvi D (2024).
 > **Does hybridization with an invasive species threaten Europe's most endangered reptile?
 > Genomic assessment of Aeolian lizards on Vulcano island.** *iScience* 27(11):111097.
-> https://doi.org/10.1016/j.isci.2024.111097 · PMC11513564
+> https://doi.org/10.1016/j.isci.2024.111097
 
 ddRAD-seq of the critically endangered Aeolian wall lizard *Podarcis raffonei* (Capo Grosso,
 Vulcano; Scoglio Faraglione) and the invasive Italian wall lizard *P. siculus* (Vulcano; Milazzo,
@@ -35,11 +35,11 @@ is in [`docs/methods_to_scripts_index.md`](docs/methods_to_scripts_index.md).
 ## Pipeline
 
 ```
-01_reads_qc/                fastp length filter [RECONSTRUCTED] → process_radtags per lane ×7 [original]
+01_reads_qc/                fastp length filter → process_radtags per lane ×7 [original]
 02_denovo_assembly/         M / n parameter sweeps [original] → r80 plots [original] → final denovo_map M2 n2 [from log]
 03_refmap_assembly/         bwa mem to rPodRaf1.pri [from BAM @PG] → ref_map.pl [original] → Z/W sexing + Z/W-free whitelist [RECONSTRUCTED]
 04_populations/             every populations run used in the paper, in order [from log]
-05_population_structure/    vcftools filter [RECONSTRUCTED] → PLINK PCA [from log] → ADMIXTURE ×10 [RECONSTRUCTED loop, params from logs]
+05_population_structure/    vcftools filter → PLINK PCA [from log] → ADMIXTURE ×10 [RECONSTRUCTED loop, params from logs]
                             → fineRADstructure [RECONSTRUCTED] ; R plotting scripts [original]
 06_hybrid_detection/        introgress, NewHybrids (parallelnewhybrid + hybriddetective), GenotypePlot — R [original]
 07_diversity_Ne/            hierfstat HE/HO/AR/FIS + FST, raincloud plots [original]; NeEstimator settings [from output]
