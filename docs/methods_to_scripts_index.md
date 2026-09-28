@@ -36,7 +36,7 @@ The server scripts still reference the old path `/home/dsalvi/LIZARD/raffonei_si
 | Whitelist: loci in both species, -p 2, -r 0.5, --min-mac 2 | SERVER `denovo_master/populations_structure/round_1/populations.log` → `-M no_intermediates -r 0.5 -p 2 --min-mac 2 --write-single-snp --vcf` → `whitelist_pure_sic_raf.tsv` |
 | All-sample dataset on that whitelist | `populations_structure/round_2/populations.log` → `-M samples_simple -W round_1/whitelist_pure_sic_raf.tsv --write-single-snp --vcf` (2,623 SNPs) |
 | Haplotype dataset (17,254 sites) for fineRADstructure | `populations_structure/fineRAD/round_1/` (whitelist) → `fineRAD/round_2/populations.log` → `-M samples_simple_fineRAD -W ... --fineRAD` → `populations.haps.radpainter` |
-| vcftools --minDP 3 --max-meanDP 80 --minGQ 30 | **command not preserved**; product = `populations_structure/PCA/pop_structure_filtered.{bed,bim,fam}` and DROPBOX `pop_structure/fst/pop_structure_filtered.vcf` |
+| vcftools --minDP 3 --max-meanDP 80 --minGQ 30 | command recorded in the author's lab notebook (June 2022): `--min-alleles 2 --max-alleles 2 --minGQ 30 --minDP 3 --max-meanDP 80 --max-missing 0.5`, 2,785 → 2,623 sites → `05_population_structure/01_vcftools_filter.sh`; product = `populations_structure/round_3/` + `PCA/pop_structure_filtered.{bed,bim,fam}` and DROPBOX `pop_structure/fst/pop_structure_filtered.vcf` (CHROM renamed to 1 for PLINK) |
 | PCA (PLINK 1.9 --pca) | SERVER `populations_structure/PCA/pop_structure_filtered.log` (`plink --bfile pop_structure_filtered --pca`); plotting DROPBOX `pop_structure/PCA/PCA_plotting_script.R`, `species_separate/PCA_plot_species_clusters.R`; per-year subsets SERVER `round_4_raffonei_CG/`, `round_5_siculus_vulc/`, `round_6_milazzo_vulcano/` |
 | Fst (hierfstat) | DROPBOX `diversity/hierFstat.R` (also used for diversity, see §3); inputs `pop_structure/fst/pop_structure_fst.recode.vcf`, `pop_IDs.txt`. Stacks-side --fstats run in SERVER `denovo_master/populations_fst/` (`-M pure_samples_raf_sic --fstats -p 2 -r 100`) |
 | fineRADstructure v0.3.2 (100k MCMC, thin 1000, burn 10k, tree 10k) | RADpainter/fineSTRUCTURE **command not preserved**; run outputs DROPBOX `pop_structure/fineRAD/populations.haps_chunks.{out,mcmc.xml,mcmcTree.xml}`; plot `pop_structure/fineRAD/plot_fineRADstructure.R` |
@@ -75,10 +75,10 @@ Server `.bash_history` only holds 2,000 lines (2025–26 work), so these interac
 
 1. `fastp` read-length filter
 2. `bwa mem -M` + samtools (sort, drop secondary) alignment loop to rPodRaf1.pri
-3. `vcftools --minDP 3 --max-meanDP 80 --minGQ 30` filtering
+3. ~~`vcftools --minDP 3 --max-meanDP 80 --minGQ 30` filtering~~ — **recovered** (Sept 2026) from the lab notebook, which also had `--min-alleles 2 --max-alleles 2 --max-missing 0.5`; see `05_population_structure/01_vcftools_filter.sh`
 4. ADMIXTURE 10-run × K1–7 loop (seeds/CV are in the log*.out files)
 5. `RADpainter paint` / `finestructure -x 10000 -y 100000 -z 1000` / `-m T -x 10000`
 6. NeEstimator v2.1 GUI settings (LD method, Pcrit for singleton exclusion)
 7. Z/W read-proportion sex calculation and construction of `Z_W_removed_whitelist.tsv`
 
-All seven are short and fully reconstructable from the paper's STAR Methods if you want a clean repo.
+The remaining six are short and fully reconstructable from the paper's STAR Methods if you want a clean repo. The lab notebook also holds a hand-written version of item 5 (RADpainter/finestructure), not yet reconciled with the STAR Methods.

@@ -23,13 +23,14 @@ Reference genome *P. raffonei* rPodRaf1.pri, NCBI RefSeq
 ## Provenance — please read
 
 The paper states "this paper does not report original code"; this repository was assembled
-afterwards (September 2026) from the original analysis directories. Three kinds of file:
+afterwards (September 2026) from the original analysis directories. Four kinds of file:
 
 | Tag | Meaning |
 |---|---|
 | **original** | copied verbatim from the analysis server / analysis folder. Only the hard-coded master path was replaced by `MASTER=${MASTER:-/path/to/capo_grosso_analysis}` (the original value is kept in a trailing comment). R scripts keep their original `setwd()` lines, which point at the author's directory layout. |
 | **from log** | the command was run interactively; it is copied from the tool's own log (`denovo_map.log`, `populations.log`, PLINK `.log`, BAM `@PG` headers, ADMIXTURE `log*.out`, NeEstimator output). Parameters are therefore exact. |
 | **RECONSTRUCTED** | no script or log survives; the file is a rewrite from the parameters given in the paper's STAR Methods plus whatever the surviving inputs/outputs constrain (file names, counts). Each such file says so in its header and states its evidence. |
+| **from notebook** | the command was run interactively but is written out in the author's analysis lab notebook (a private lab-book repository) together with its result; parameters are exact, but the record is hand-written rather than a tool log. |
 
 All ~100 `populations` invocations that exist on the server, including exploratory ones not used
 in the paper, are listed in [`04_populations/all_stacks_commands.tsv`](04_populations/all_stacks_commands.tsv).
@@ -43,7 +44,7 @@ is in [`docs/methods_to_scripts_index.md`](docs/methods_to_scripts_index.md).
 02_denovo_assembly/         M / n parameter sweeps [original] → r80 plots [original] → final denovo_map M2 n2 [from log]
 03_refmap_assembly/         bwa mem to rPodRaf1.pri [from BAM @PG] → ref_map.pl [original] → Z/W sexing + Z/W-free whitelist [RECONSTRUCTED]
 04_populations/             every populations run used in the paper, in order [from log]
-05_population_structure/    vcftools filter → PLINK PCA [from log] → ADMIXTURE ×10 [RECONSTRUCTED loop, params from logs]
+05_population_structure/    vcftools filter [from notebook] → PLINK PCA [from log] → ADMIXTURE ×10 [RECONSTRUCTED loop, params from logs]
                             → fineRADstructure [RECONSTRUCTED] ; R plotting scripts [original]
 06_hybrid_detection/        introgress, NewHybrids (parallelnewhybrid + hybriddetective), GenotypePlot — R [original]
 07_diversity_Ne/            hierfstat HE/HO/AR/FIS + FST, raincloud plots [original]; NeEstimator settings [from output]
@@ -73,7 +74,8 @@ all-sample SNP set → fineRAD haplotypes → by-year/site subsets → FST → i
 GenotypePlot loci → (ref-map) diversity, down-sampling ×5, Ne input, sex-chromosome check.
 
 ### 5. Population structure
-* `01_vcftools_filter.sh` — `--minDP 3 --max-meanDP 80 --minGQ 30` → 2,623 SNPs; QC tables for `plot_depth_missingness.R`.
+* `01_vcftools_filter.sh` — `--minDP 3 --minGQ 30 --max-meanDP 80 --min-alleles 2 --max-alleles 2 --max-missing 0.5`
+  (command from the lab notebook) → 2,623 of 2,785 SNPs; QC tables for `plot_depth_missingness.R`.
 * `02_plink_pca.sh` + `PCA_plotting_script.R`, `PCA_plot_species_clusters.R`.
 * `03_admixture_runs.sh` — K 1–8, 10 runs, `--cv=10`; `plot_CV_error.R`, `plot_admixture_results.R`,
   `admixture_hierarchical.R` (Capo Grosso by year, Vulcano by year, Vulcano vs Milazzo).
